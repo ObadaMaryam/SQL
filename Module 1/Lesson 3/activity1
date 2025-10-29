@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS Products(
+Product_id TEXT,
+Product_name TEXT,
+Supplier_id TEXT,
+Category_id TEXT,
+Unit TEXT,
+Price Real
+);
+
+INSERT INTO Products(Product_id, Product_name, Supplier_id, Category_id, Unit, Price)
+VALUES
+("1","Apple","1","010","10kg",300),
+("2","Banana","2","020","5dzn",70.5),
+("3","Mango","1","030","7kg",180),
+("4","Orange","4","040","15kg",350),
+("5","Lemon","2","050","2kg",400);
+
+SELECT * FROM Products;
+
+SELECT COUNT(Product_id) as Product_Count FROM Products;
+
+SELECT SUM(Price) as Total_Price FROM Products;
+
+SELECT AVG(Price) as Average_Price FROM Products;
