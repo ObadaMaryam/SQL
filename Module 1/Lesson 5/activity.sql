@@ -1,10 +1,12 @@
+-- Create SALESMAN table
 CREATE TABLE IF NOT EXISTS SALESMAN(
-Salesman_id TEXT PRIMARY KEY,
-Name TEXT,
-City TEXT,
-Comission REAL
+    Salesman_id TEXT PRIMARY KEY,
+    Name TEXT,
+    City TEXT,
+    Comission REAL
 );
 
+-- Insert data into SALESMAN
 INSERT INTO SALESMAN(Salesman_id, Name, City, Comission)
 VALUES
 ('5001', 'James Hoog', 'New York', 0.15),
@@ -14,14 +16,18 @@ VALUES
 ('5007', 'Paul Adam', 'Rome', 0.13),
 ('5003', 'Lauson Hen', 'San Jose', 0.12);
 
+
+-- Create CUSTOMER table
 CREATE TABLE IF NOT EXISTS CUSTOMER(
-Customer_id TEXT,
-CustomerName TEXT PRIMARY KEY,
-City TEXT,
-Grade INTEGER,
-Salesman_id TEXT
+    Customer_id TEXT PRIMARY KEY,
+    CustomerName TEXT,
+    City TEXT,
+    Grade INTEGER,
+    Salesman_id TEXT,
+    FOREIGN KEY (Salesman_id) REFERENCES SALESMAN(Salesman_id)
 );
 
+-- Insert data into CUSTOMER
 INSERT INTO CUSTOMER(Customer_id, CustomerName, City, Grade, Salesman_id)
 VALUES
 ('3002', 'nick rimando', 'new york', 100, '5001'),
@@ -33,16 +39,19 @@ VALUES
 ('3003', 'jozy altidor', 'moscow', 200, '5007'),
 ('3001', 'brad guzan', 'london', NULL, '5005');
 
+
+-- Create Orders table
 CREATE TABLE IF NOT EXISTS Orders(
-Order_No TEXT PRIMARY KEY,
-Purch_AMT REAL,
-Order_Date TEXT,
-Customer_id TEXT,
-Salesman_id TEXT,
-FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
-FOREIGN KEY (Salesman_id) REFERENCES Salesman(Salesman_id)
+    Order_No TEXT PRIMARY KEY,
+    Purch_AMT REAL,
+    Order_Date TEXT,
+    Customer_id TEXT,
+    Salesman_id TEXT,
+    FOREIGN KEY (Customer_id) REFERENCES CUSTOMER(Customer_id),
+    FOREIGN KEY (Salesman_id) REFERENCES SALESMAN(Salesman_id)
 );
 
+-- Insert data into Orders
 INSERT INTO Orders(Order_No, Purch_AMT, Order_Date, Customer_id, Salesman_id)
 VALUES
 ('70001', 150.5, '2012-10-05', '3005', '5002'),
@@ -52,17 +61,26 @@ VALUES
 ('70007', 948.5, '2012-09-10', '3005', '5005'),
 ('70005', 2400.6, '2012-07-27', '3007', '5006');
 
-SELECT CUSTOMER.CustomerName, SALESMAN.Name, SALESMAN.City
+
+-- ✅ Query 1: Customer whose city = Salesman's city
+SELECT CUSTOMER.CustomerName, SALESMAN.Name AS SalesmanName, SALESMAN.City
 FROM CUSTOMER
 JOIN SALESMAN ON CUSTOMER.City = SALESMAN.City;
 
-SELECT CUSTOMER.CustomerName, SALESMAN.Name
-FROM CUSTOMER
-JOIN SALESMAN ON CUSTOMER.Saleman_id = SALESMAN.Saleman_id;
 
-SELECT Orders.Order_No, CUSTOMER.CustomerName, Orders.Customer_id, Orders.Salesman_id
+-- ✅ Query 2: Customer + Salesman using Salesman_id
+SELECT CUSTOMER.CustomerName, SALESMAN.Name AS SalesmanName
+FROM CUSTOMER
+JOIN SALESMAN ON CUSTOMER.Salesman_id = SALESMAN.Salesman_id;
+
+
+-- ✅ Query 3: Orders where Customer city differs from Salesman city
+SELECT 
+    Orders.Order_No,
+    CUSTOMER.CustomerName,
+    Orders.Customer_id,
+    Orders.Salesman_id
 FROM Orders
 JOIN CUSTOMER ON Orders.Customer_id = CUSTOMER.Customer_id
 JOIN SALESMAN ON Orders.Salesman_id = SALESMAN.Salesman_id
-WHERE CUSTOMER.City <> SALESMAN.City;
-
+WHERE LOWER(CUSTOMER.City) <> LOWER(SALESMAN.City);
