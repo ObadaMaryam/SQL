@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS EMPLOYEES(
+EMPLOYEE_id INT PRIMARY KEY,
+first_name TEXT,
+last_name TEXT,
+department TEXT,
+salary REAL
+);
+
+INSERT INTO employees (employee_id, first_name, last_name, department, salary)
+VALUES
+(101, 'Harsh', 'Patel', 'IT', 75000.00);
+(102, 'Priya', 'Sharma', 'HR', 62000.50);
+(103, 'Amit', 'Singh', 'Sales', 81000.25);
+
+CREATE TABLE IF NOT EXISTS COMPANY(
+EMPLOYEE_id TEXT,
+NAME TEXT,
+DEPARTMENT_id TEXT,
+MANAGER_id TEXT,
+SALARY REAL
+);
+
+INSERT INTO COMPANY(EMPLOYEE_id, NAME, DEPARTMENT_id, MANAGER_id, SALARY)
+VALUES
+('100', 'STEVEN', '90', '100', 24000),
+('101', 'NEENA KOCCHAR', '90', '100', 17000),
+('102', 'LEX DEHAAN', '90', '102', 9000),
+('103', 'BRUCE LEE', '60', '103', 4800),
+('104', 'DIANA WILLS', '60', '103', 25000),
+('105', 'VALLI PATOR', '50', '100', 4200),
+('1973', 'LUV HAMI', '60', '102', 5000),
+('106', 'DAVID AUSTIN', '90', '100', 6000);
+
+
+SELECT EMPLOYEES.first_name, COMPANY.EMPLOYEE_id AS COMPANY,
+FROM COMPANY
+JOIN EMPLOYEES ON EMPLOYEE_id = EMPLOYEES;
